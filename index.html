@@ -5,38 +5,41 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Sign in — Photo Albums</title>
   <link rel="stylesheet" href="styles.css">
-  <!-- Google Identity Services library -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
+
 <body>
   <div class="center">
     <div class="card" id="authCard">
-      <h1>Welcome</h1>
 
-      <!-- Google sign-in button placeholder -->
-      <div id="gSignIn" style="margin-bottom:12px"></div>
-      <div class="divider">or</div>
+      <h1>Welcome</h1>
 
       <!-- Sign in form -->
       <div class="form" id="signinForm">
         <h3>Sign in</h3>
+
         <input id="signinUsername" placeholder="Username or email" type="text">
         <input id="signinPassword" placeholder="Password" type="password">
+
+        <!-- Normal sign-in button -->
         <button id="signinBtn" class="btn primary">Sign In</button>
+
         <div class="muted" id="signinMsg"></div>
+      </div>
+
+      <!-- Sign-up redirect message -->
+      <div style="text-align:center; margin-top:12px;">
+        <span class="muted">Don't have an account?</span>
+        <a href="signup.html" style="color:var(--accent); text-decoration:none;">
+          Sign up
+        </a>
       </div>
 
       <hr>
 
-      <!-- Sign up form -->
-      <div class="form" id="signupForm">
-        <h3>Create account</h3>
-        <input id="signupUsername" placeholder="Username" type="text">
-        <input id="signupEmail" placeholder="Email" type="email">
-        <input id="signupPassword" placeholder="Password" type="password">
-        <button id="signupBtn" class="btn">Sign Up</button>
-        <div class="muted" id="signupMsg"></div>
-      </div>
+      <!-- Google Sign-In button BELOW Sign-In -->
+      <div id="gSignIn" style="margin-top:12px;"></div>
+
     </div>
   </div>
 
