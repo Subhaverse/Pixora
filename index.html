@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sign in — Photo Albums</title>
   <link rel="stylesheet" href="styles.css">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -12,8 +12,8 @@
     <div class="card">
       <h1>Welcome</h1>
 
-      <!-- Sign in form -->
-      <div class="form" id="signinForm">
+      <!-- Local Sign in form -->
+      <div class="form">
         <h3>Sign in</h3>
         <input id="signinUsername" placeholder="Username or email" type="text">
         <input id="signinPassword" placeholder="Password" type="password">
@@ -21,15 +21,16 @@
         <div class="muted" id="signinMsg"></div>
       </div>
 
+      <!-- Sign-up redirect -->
       <div style="text-align:center; margin-top:12px;">
         <span class="muted">Don't have an account?</span>
         <a href="signup.html" style="color:var(--accent); text-decoration:none;">Sign up</a>
       </div>
 
-      <hr style="opacity:0.3; margin:16px 0;">
+      <hr class="divider-strong">
 
-      <!-- Google Sign-In button container -->
-      <div id="gSignInContainer"></div>
+      <!-- Google Sign-In -->
+      <div id="gSignIn"></div>
 
     </div>
   </div>
