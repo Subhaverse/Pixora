@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;600&family=Festive&display=swap');
 
 * { box-sizing: border-box; margin:0; padding:0; }
 
@@ -78,11 +78,13 @@ body {
     text-align: center;
 }
 
-/* Apply Adobe Font 'new-astro' to Pixora logo */
+/* Apply Permanent Marker font to Pixora logo */
 .logo {
-    font-family: 'new-astro', sans-serif;
+    font-family: "Permanent Marker", cursive;
+    font-weight: 400;
     font-style: normal;
-    font-weight: 300;
+    font-size: 48px; /* Increased font size */
+    color: #0b1a33; /* Deep navy blue to match theme */
 }
 
 input {
@@ -149,6 +151,20 @@ input:focus {
     color: #0095f6;
     text-decoration: none;
     font-weight: 600;
+}
+
+/* Festive Regular Font */
+.festive-regular {
+  font-family: "Festive", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Permanent Marker Regular Font */
+.permanent-marker-regular {
+  font-family: "Permanent Marker", cursive;
+  font-weight: 400;
+  font-style: normal;
 }
 
 /* Responsive */
