@@ -125,13 +125,16 @@ input:focus {
     width: 100%; /* Full width of parent */
     height: 50px; /* Fixed height */
     margin-top: 10px;
-    min-width: 200px; /* Prevent shrinking below this width */
+    min-width: 250px; /* Ensure a minimum width */
+    max-width: 400px; /* Optional: Limit maximum width */
+    box-sizing: border-box; /* Include padding/border in dimensions */
 }
 
 .google-btn > div {
-    flex: 1; /* Ensure child div stretches to fill parent */
+    flex: 1 1 auto; /* Allow child to grow/shrink within limits */
     height: 100%; /* Match parent height */
     border-radius: 5px !important;
+    overflow: hidden; /* Prevent content overflow */
 }
 
 /* Signup link */
