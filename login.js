@@ -1,53 +1,52 @@
-const GOOGLE_CLIENT_ID = '763660019548-6q46a2r1h23rt373f67rtatju36g5aue.apps.googleusercontent.com';
+const emailInput = document.getElementById("emailInput");
+const passwordInput = document.getElementById("passwordInput");
+const loginBtn = document.getElementById("loginBtn");
+const loginMsg = document.getElementById("loginMsg");
 
-function decodeJwt(jwt) {
-  const parts = jwt.split('.');
-  if (parts.length !== 3) return null;
-  try {
-    const payload = atob(parts[1].replace(/-/g,'+').replace(/_/g,'/'));
-    return JSON.parse(decodeURIComponent(escape(payload)));
-  } catch(e){ console.error('JWT decode failed:', e); return null; }
-}
+const users = JSON.parse(localStorage.getItem("users") || "[]");
 
-const signinUsername = document.getElementById('signinUsername');
-const signinPassword = document.getElementById('signinPassword');
-const signinBtn = document.getElementById('signinBtn');
-const signinMsg = document.getElementById('signinMsg');
+// Email/Password Login
+loginBtn.onclick = () => {
+  const email = emailInput.value.trim();
+  const pass = passwordInput.value;
 
-// Local login
-function loadUsers(){ return JSON.parse(localStorage.getItem('users')||'[]'); }
+  if (!email || !pass) {
+    loginMsg.textContent = "Please fill all fields.";
+    return;
+  }
 
-signinBtn.addEventListener('click', ()=>{
-  const u = signinUsername.value.trim(), p = signinPassword.value;
-  signinMsg.textContent='';
-  if(!u || !p){ signinMsg.textContent='Enter username/email and password'; return; }
-  const users = loadUsers();
-  const user = users.find(x=>(x.username===u||x.email===u)&&x.password===p);
-  if(!user){ signinMsg.textContent='Invalid credentials'; return; }
-  const profile = {source:'local', id:'local:'+user.username, name:user.name||user.username, email:user.email, picture:user.picture||''};
-  localStorage.setItem('sessionUser', JSON.stringify(profile));
-  window.location.href='home.html';
-});
+  const user = users.find(u => u.email === email && u.password === pass);
+  if (!user) {
+    loginMsg.textContent = "Invalid email or password.";
+    return;
+  }
 
-// Google login
-function handleGoogleCredential(response){
-  if(!response?.credential) return alert('Google sign-in failed.');
-  const payload = decodeJwt(response.credential);
-  if(!payload) return alert('Failed to decode Google profile.');
-  const profile = {source:'google', id:payload.sub, name:payload.name, email:payload.email, picture:payload.picture};
-  localStorage.setItem('sessionUser', JSON.stringify(profile));
-  window.location.href='home.html';
-}
+  localStorage.setItem("sessionUser", JSON.stringify(user));
+  window.location.href = "home.html";
+};
 
-window.addEventListener('load', ()=>{
-  if(!window.google || !google.accounts || !google.accounts.id) return;
+// Google Login
+window.onload = () => {
   google.accounts.id.initialize({
-    client_id: GOOGLE_CLIENT_ID,
-    callback: handleGoogleCredential
+    client_id: "763660019548-6q46a2r1h23rt373f67rtatju36g5aue.apps.googleusercontent.com",
+    callback: googleLoginSuccess
   });
+
   google.accounts.id.renderButton(
-    document.getElementById('gSignIn'),
-    { theme:'filled_blue', size:'large', width:'100%', shape:'rectangular', text:'continue_with' }
+    document.getElementById("googleLogin"),
+    { theme: "outline", size: "large", width: "100%" }
   );
-  google.accounts.id.prompt(); // optional auto popup
-});
+};
+
+function googleLoginSuccess(response) {
+  const data = JSON.parse(atob(response.credential.split(".")[1]));
+
+  const googleUser = {
+    name: data.name,
+    email: data.email,
+    picture: data.picture
+  };
+
+  localStorage.setItem("sessionUser", JSON.stringify(googleUser));
+  window.location.href = "home.html";
+}

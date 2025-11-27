@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;600&display=swap');
+
+:root { --bg:#071022; --muted:#b9c3cf; --accent:#4f46e5; }
+*,
+*::before,
+*::after { box-sizing:border-box; }
+
+body {
+  margin:0;
+  background:linear-gradient(135deg,var(--bg),#0b1a33);
+  font-family:Inter,sans-serif;
+  color:white;
+}
+
+.center { display:flex; justify-content:center; align-items:center; height:100vh; }
+
+.card {
+  background:rgba(255,255,255,0.05);
+  padding:24px;
+  border-radius:12px;
+  width:360px;
+  text-align:center;
+  box-shadow:0 8px 25px rgba(0,0,0,0.5);
+}
+
+.profile-section {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.profile-pic {
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.12);
+}
+
+.profile-name { font-size:18px; font-weight:600; }
+.profile-email { color:var(--muted); font-size:14px; }
+
+.logout-container button {
+  padding:8px 14px;
+  border-radius:8px;
+  border:none;
+  background:#2b3245;
+  color:white;
+  cursor:pointer;
+}

@@ -1,40 +1,38 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sign in — Photo Albums</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixora — Login</title>
+  <link rel="stylesheet" href="login.css">
+  <script src="https://accounts.google.com/gsi/client" async></script>
 </head>
 <body>
-  <div class="center">
-    <div class="card">
-      <h1>Welcome</h1>
+  <div class="container">
 
-      <!-- Local Sign in form -->
-      <div class="form">
-        <h3>Sign in</h3>
-        <input id="signinUsername" placeholder="Username or email" type="text">
-        <input id="signinPassword" placeholder="Password" type="password">
-        <button id="signinBtn" class="btn primary">Sign In</button>
-        <div class="muted" id="signinMsg"></div>
-      </div>
-
-      <!-- Sign-up redirect -->
-      <div style="text-align:center; margin-top:12px;">
-        <span class="muted">Don't have an account?</span>
-        <a href="signup.html" style="color:var(--accent); text-decoration:none;">Sign up</a>
-      </div>
-
-      <hr class="divider-strong">
-
-      <!-- Google Sign-In -->
-      <div id="gSignIn"></div>
-
+    <!-- Splash images -->
+    <div class="splash-area">
+      <img src="img/main.jpg" class="splash-img" alt="Main preview of Pixora app">
+      <img src="img/overlay1.jpg" class="overlay1" alt="Overlay preview 1">
+      <img src="img/overlay2.jpg" class="overlay2" alt="Overlay preview 2">
     </div>
+
+    <!-- Login box -->
+    <div class="login-box">
+      <h1 class="logo">Pixora</h1>
+
+      <input type="email" id="emailInput" placeholder="Email">
+      <input type="password" id="passwordInput" placeholder="Password">
+      <button id="loginBtn" class="btn-login">Sign In</button>
+
+      <div class="divider">OR</div>
+      <div id="googleLogin" class="google-btn"></div>
+
+      <p class="signup-text">Don’t have an account? <a href="signup.html">Sign Up</a></p>
+    </div>
+
   </div>
 
-  <script type="module" src="login.js"></script>
+  <script src="login.js"></script>
 </body>
 </html>

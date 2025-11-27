@@ -1,24 +1,31 @@
-// signup.js
-function loadUsers(){ return JSON.parse(localStorage.getItem('users')||'[]'); }
-function saveUsers(users){ localStorage.setItem('users', JSON.stringify(users)); }
+const usernameInput = document.getElementById("signupUsername");
+const emailInput = document.getElementById("signupEmail");
+const passwordInput = document.getElementById("signupPassword");
+const signupBtn = document.getElementById("signupBtn");
+const signupMsg = document.getElementById("signupMsg");
 
-const signupUsername=document.getElementById('signupUsername');
-const signupEmail=document.getElementById('signupEmail');
-const signupPassword=document.getElementById('signupPassword');
-const signupBtn=document.getElementById('signupBtn');
-const signupMsg=document.getElementById('signupMsg');
+let users = JSON.parse(localStorage.getItem("users") || "[]");
 
-signupBtn.onclick=()=>{
-  const u=signupUsername.value.trim();
-  const e=signupEmail.value.trim();
-  const p=signupPassword.value;
-  signupMsg.textContent='';
-  if(!u||!e||!p){ signupMsg.textContent='Fill all fields'; return; }
-  if(p.length<4){ signupMsg.textContent='Password too short'; return; }
-  const users=loadUsers();
-  if(users.find(x=>x.username===u||x.email===e)){ signupMsg.textContent='User exists'; return; }
-  users.push({username:u,email:e,password:p,name:u,picture:''});
-  saveUsers(users);
-  signupMsg.textContent='Account created! Redirecting...';
-  setTimeout(()=>window.location.href='index.html',1200);
+signupBtn.onclick = () => {
+  const name = usernameInput.value.trim();
+  const email = emailInput.value.trim();
+  const pass = passwordInput.value;
+
+  if (!name || !email || !pass) {
+    signupMsg.textContent = "All fields are required.";
+    return;
+  }
+
+  if (users.some(u => u.email === email)) {
+    signupMsg.textContent = "Email already exists.";
+    return;
+  }
+
+  const newUser = { name, email, password: pass };
+  users.push(newUser);
+
+  localStorage.setItem("users", JSON.stringify(users));
+  signupMsg.textContent = "Account created! Redirecting...";
+
+  setTimeout(() => { window.location.href = "index.html"; }, 1200);
 };
