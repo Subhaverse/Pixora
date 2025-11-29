@@ -9,7 +9,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    padding: 20px;
+    min-height: 100vh;
 }
 
 .container {
@@ -17,74 +18,76 @@ body {
     gap: 80px;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: flex-start;
-    
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
-/* SPLASH IMAGES */
+/* SPLASH IMAGES AREA (responsive) */
 .splash-area {
     position: relative;
-    width: 350px;
-    height: auto;
+    width: 360px;
+    height: 420px;
+    flex: 0 0 auto;
 }
 
-.splash-img, .overlay1, .overlay2 {
+/* Base image rules - let them scale */
+.splash-area img {
     position: absolute;
     border-radius: 15px;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.45); /* 💫 improved soft shadow */
+    box-shadow: 0 25px 50px rgba(0,0,0,0.45);
     width: 100%;
+    height: auto;
     transition: transform 0.3s ease;
 }
 
-.splash-img { 
-    width: 345px;   /* set new width */
-    height: auto;  /* set new height */
-    top: -80px; 
-    left: -90px; 
-    z-index:3; 
+/* main image sits on top */
+.splash-img {
+    top: 0;
+    left: 0;
+    z-index:3;
 }
-.overlay1 { 
-    width: 280px;   /* set new width */
-    height: 420px;  /* set new height */
-    top:-10px; 
-    left:243px; 
-    z-index:2; 
-    transform: rotate(4deg); 
+
+/* offsets expressed in percent/relative widths so they adapt */
+.overlay1 {
+    top: 20px;
+    left: 18%;
+    width: 85%;
+    z-index:2;
+    transform: rotate(4deg);
 }
-.overlay2 { 
-    width: 280px;   /* set new width */
-    height: 420px;  /* set new height */
-    top:-10px; 
-    left:-357px; 
-    z-index:1; 
-    transform: rotate(-4deg); 
+
+.overlay2 {
+    top: 20px;
+    right: 18%;
+    width: 85%;
+    z-index:1;
+    transform: rotate(-4deg);
 }
 
 .splash-img:hover, .overlay1:hover, .overlay2:hover {
     transform: scale(1.05);
 }
 
-/* LOGIN BOX */
+/* LOGIN BOX - removed left:245px manual offset and used normal flow */
 .login-box {
-    position: relative; /* Enable precise positioning */
-    left: 245px; /* Move the login box to the right */
-    top: 20px; /* Adjust vertical alignment if needed */
-    
     background: #fff;
     padding: 30px 25px;
     border-radius: 10px;
     box-shadow: 0 5px 25px rgba(0,0,0,0.1);
-    width: 350px;
+    width: 100%;
+    max-width: 380px;
     text-align: center;
 }
 
-/* Apply Permanent Marker font to Pixora logo */
+/* Logo font */
 .logo {
     font-family: "Permanent Marker", cursive;
     font-weight: 400;
     font-style: normal;
-    font-size: 48px; /* Increased font size */
-    color: #0b1a33; /* Deep navy blue to match theme */
+    font-size: 48px;
+    color: #0b1a33;
+    margin-bottom: 12px;
 }
 
 input {
@@ -119,60 +122,47 @@ input:focus {
     font-weight: 500;
 }
 
-/* Enforce stricter dimensions for Google button */
+/* Google button rules preserved but responsive */
 .google-btn {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
-    width: 100% !important; /* Full width of parent */
-    height: 50px !important; /* Fixed height */
+    width: 100% !important;
+    height: 50px !important;
     margin-top: 10px !important;
-    min-width: 300px !important; /* Ensure a minimum width */
-    max-width: 400px !important; /* Optional: Limit maximum width */
-    box-sizing: border-box !important; /* Include padding/border in dimensions */
-    overflow: hidden !important; /* Prevent content overflow */
+    box-sizing: border-box !important;
+    overflow: hidden !important;
 }
 
 .google-btn > div {
-    flex: 1 1 auto !important; /* Allow child to grow/shrink within limits */
-    height: 100% !important; /* Match parent height */
-    width: 100% !important; /* Match parent width */
+    flex: 1 1 auto !important;
+    height: 100% !important;
+    width: 100% !important;
     border-radius: 5px !important;
-    overflow: hidden !important; /* Prevent content overflow */
+    overflow: hidden !important;
 }
 
-/* Signup link */
 .signup-text {
-    margin-top: 15px;
+    margin-top: 12px;
     font-size: 14px;
 }
 
-.signup-text a {
-    color: #0095f6;
-    text-decoration: none;
-    font-weight: 600;
+/* MOBILE */
+@media (max-width: 900px) {
+    .container { gap: 40px; }
+    .splash-area { width: 300px; height: 360px; }
 }
 
-/* Festive Regular Font */
-.festive-regular {
-  font-family: "Festive", cursive;
-  font-weight: 400;
-  font-style: normal;
-}
-
-/* Permanent Marker Regular Font */
-.permanent-marker-regular {
-  font-family: "Permanent Marker", cursive;
-  font-weight: 400;
-  font-style: normal;
-}
-
-/* Responsive */
-@media (max-width: 800px) {
+@media (max-width: 520px) {
     .container {
         flex-direction: column;
-        align-items: center;
-        gap: 30px;
+        gap: 28px;
     }
-    .splash-area { width: 250px; height: 330px; }
+    .splash-area {
+        width: 250px;
+        height: 300px;
+    }
+
+    /* Slightly reduce logo size */
+    .logo { font-size: 40px; }
 }
