@@ -1,4 +1,4 @@
- <!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -21,6 +21,45 @@
       </div>
     </div>
   </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCzas4koTSeD8YE4Z4-2h8qyD32ApNwVP4",
+      authDomain: "pixora-65cc7.firebaseapp.com",
+      projectId: "pixora-65cc7",
+      storageBucket: "pixora-65cc7.firebasestorage.app",
+      messagingSenderId: "684148587068",
+      appId: "1:684148587068:web:a58d492d85c6dc7a24e139",
+      measurementId: "G-72ZTVEJVR3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    window.firebaseAuth = auth;
+
+    // expose a helper to get current user (or null)
+    window.getCurrentUserInfo = () => auth.currentUser;
+
+    // redirect to login if not authenticated
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+      } else {
+        // if on this page, we can update DOM (home.js will also do the same)
+        // nothing else required here
+      }
+    });
+
+    // expose logout helper
+    window.firebaseLogout = async () => {
+      await signOut(auth);
+      window.location.href = "index.html";
+    };
+  </script>
+
   <script src="home.js"></script>
 </body>
 </html>

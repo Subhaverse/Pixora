@@ -25,6 +25,36 @@
       </div>
     </div>
   </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCzas4koTSeD8YE4Z4-2h8qyD32ApNwVP4",
+      authDomain: "pixora-65cc7.firebaseapp.com",
+      projectId: "pixora-65cc7",
+      storageBucket: "pixora-65cc7.firebasestorage.app",
+      messagingSenderId: "684148587068",
+      appId: "1:684148587068:web:a58d492d85c6dc7a24e139",
+      measurementId: "G-72ZTVEJVR3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    window.firebaseAuth = auth;
+
+    // Expose create user helper
+    window.firebaseCreateUser = async (username, email, password) => {
+      const userCred = await createUserWithEmailAndPassword(auth, email, password);
+      // set displayName (username) on the user profile
+      if (username) {
+        await updateProfile(userCred.user, { displayName: username });
+      }
+      return userCred;
+    };
+  </script>
+
   <script src="signup.js"></script>
 </body>
 </html>

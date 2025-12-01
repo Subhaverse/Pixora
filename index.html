@@ -34,33 +34,98 @@
 
       <div class="divider">OR</div>
 
-      <!-- Google Sign-In button container -->
+      <!-- Google Sign-In button container (keeps your layout) -->
       <div id="googleLogin"></div>
 
       <p class="signup-text">Don’t have an account? <a href="signup.html">Sign Up</a></p>
+      <div id="loginMsg" class="muted" style="margin-top:10px;"></div>
     </div>
 
   </div>
 
-  <script>
-    
-    window.onload = function () {
-      google.accounts.id.initialize({
-        client_id: "YOUR_CLIENT_ID_HERE",
-        callback: (res) => console.log(res),
-      });
+  <!-- Firebase init & small helpers (module) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      GoogleAuthProvider,
+      signInWithPopup,
+      signOut,
+      onAuthStateChanged,
+      updateProfile
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-      google.accounts.id.renderButton(
-        document.getElementById("googleLogin"),
-        {
-          theme: "outline",
-          size: "large",
-          width: "100%"
-        }
-      );
+    // YOUR firebaseConfig (kept from earlier)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCzas4koTSeD8YE4Z4-2h8qyD32ApNwVP4",
+      authDomain: "pixora-65cc7.firebaseapp.com",
+      projectId: "pixora-65cc7",
+      storageBucket: "pixora-65cc7.firebasestorage.app",
+      messagingSenderId: "684148587068",
+      appId: "1:684148587068:web:a58d492d85c6dc7a24e139",
+      measurementId: "G-72ZTVEJVR3"
     };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Expose auth to non-module scripts
+    window.firebaseAuth = auth;
+
+    // Expose sign-in with email function
+    window.firebaseSignInWithEmail = async (email, password) => {
+      return await signInWithEmailAndPassword(auth, email, password);
+    };
+
+    // Expose sign-in with Google
+    const provider = new GoogleAuthProvider();
+    window.firebaseSignInWithGoogle = async () => {
+      return await signInWithPopup(auth, provider);
+    };
+
+    // Render a Google-styled button inside #googleLogin (keeps layout stable)
+    const googleContainer = document.getElementById("googleLogin");
+    if (googleContainer) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn-login google-native-btn";
+      // style the small Google logo and text similarly to your UI
+      btn.innerHTML = '<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="G" style="width:20px;height:20px;margin-right:10px;vertical-align:middle"/><span style="vertical-align:middle">Sign in with Google</span>';
+      btn.style.background = "#fff";
+      btn.style.color = "#111";
+      btn.style.display = "inline-flex";
+      btn.style.alignItems = "center";
+      btn.style.justifyContent = "center";
+      btn.style.gap = "10px";
+      btn.style.border = "1px solid #dcdcdc";
+      btn.style.width = "100%";
+      btn.style.padding = "12px";
+      btn.style.borderRadius = "5px";
+      btn.onclick = async () => {
+        try {
+          await window.firebaseSignInWithGoogle();
+          // redirect will be handled by login.js onAuthState
+        } catch (err) {
+          alert("Google sign-in failed: " + err.message);
+        }
+      };
+      googleContainer.appendChild(btn);
+    }
+
+    // Optional: handle immediate auth state changes (redirect if already signed in)
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // if user already authenticated, go to home
+        // do not redirect if already on home
+        if (!location.pathname.includes("home.html")) {
+          location.href = "home.html";
+        }
+      }
+    });
   </script>
 
+  <!-- Your login logic (updated to call Firebase helpers) -->
   <script src="login.js"></script>
 </body>
 </html>

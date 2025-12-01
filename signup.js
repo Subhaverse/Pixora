@@ -1,12 +1,11 @@
+// signup.js
 const usernameInput = document.getElementById("signupUsername");
 const emailInput = document.getElementById("signupEmail");
 const passwordInput = document.getElementById("signupPassword");
 const signupBtn = document.getElementById("signupBtn");
 const signupMsg = document.getElementById("signupMsg");
 
-let users = JSON.parse(localStorage.getItem("users") || "[]");
-
-signupBtn.onclick = () => {
+signupBtn.onclick = async () => {
   const name = usernameInput.value.trim();
   const email = emailInput.value.trim();
   const pass = passwordInput.value;
@@ -16,16 +15,16 @@ signupBtn.onclick = () => {
     return;
   }
 
-  if (users.some(u => u.email === email)) {
-    signupMsg.textContent = "Email already exists.";
-    return;
+  try {
+    // create user in Firebase Auth and set displayName
+    await window.firebaseCreateUser(name, email, pass);
+    signupMsg.textContent = "Account created! Redirecting...";
+    setTimeout(() => { window.location.href = "index.html"; }, 800);
+  } catch (err) {
+    if (err.code === 'auth/email-already-in-use') {
+      signupMsg.textContent = "Email already exists.";
+    } else {
+      signupMsg.textContent = err.message || "Signup failed.";
+    }
   }
-
-  const newUser = { name, email, password: pass };
-  users.push(newUser);
-
-  localStorage.setItem("users", JSON.stringify(users));
-  signupMsg.textContent = "Account created! Redirecting...";
-
-  setTimeout(() => { window.location.href = "index.html"; }, 1200);
 };
