@@ -9,8 +9,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
-    min-height: 100vh;
+    height: 100vh;
 }
 
 .container {
@@ -18,76 +17,73 @@ body {
     gap: 80px;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-    max-width: 1100px;
-    margin: 0 auto;
+    align-items: flex-start;
+    
 }
 
-/* SPLASH IMAGES AREA (responsive) */
+/* SPLASH IMAGES */
 .splash-area {
     position: relative;
-    width: 360px;
-    height: 420px;
-    flex: 0 0 auto;
+    width: 350px;
+    height: auto;
 }
 
-/* Base image rules - let them scale */
-.splash-area img {
+.splash-img, .overlay1, .overlay2 {
     position: absolute;
     border-radius: 15px;
     box-shadow: 0 25px 50px rgba(0,0,0,0.45);
     width: 100%;
-    height: auto;
     transition: transform 0.3s ease;
 }
 
-/* main image sits on top */
-.splash-img {
-    top: 0;
-    left: 0;
-    z-index:3;
+.splash-img { 
+    width: 345px;
+    height: auto;
+    top: -80px; 
+    left: -90px; 
+    z-index:3; 
 }
-
-/* offsets expressed in percent/relative widths so they adapt */
-.overlay1 {
-    top: 20px;
-    left: 18%;
-    width: 85%;
-    z-index:2;
-    transform: rotate(4deg);
+.overlay1 { 
+    width: 280px;
+    height: 420px;
+    top:-10px; 
+    left:243px; 
+    z-index:2; 
+    transform: rotate(4deg); 
 }
-
-.overlay2 {
-    top: 20px;
-    right: 18%;
-    width: 85%;
-    z-index:1;
-    transform: rotate(-4deg);
+.overlay2 { 
+    width: 280px;
+    height: 420px;
+    top:-10px; 
+    left:-357px; 
+    z-index:1; 
+    transform: rotate(-4deg); 
 }
 
 .splash-img:hover, .overlay1:hover, .overlay2:hover {
     transform: scale(1.05);
 }
 
-/* LOGIN BOX - removed left:245px manual offset and used normal flow */
+/* LOGIN BOX */
 .login-box {
+    position: relative;
+    left: 245px;
+    top: 20px;
+    
     background: #fff;
     padding: 30px 25px;
     border-radius: 10px;
     box-shadow: 0 5px 25px rgba(0,0,0,0.1);
-    width: 100%;
-    max-width: 380px;
+    width: 350px;
     text-align: center;
 }
 
-/* Logo font */
 .logo {
     font-family: "Permanent Marker", cursive;
     font-weight: 400;
     font-style: normal;
     font-size: 48px;
     color: #0b1a33;
-    margin-bottom: 12px;
 }
 
 input {
@@ -122,7 +118,6 @@ input:focus {
     font-weight: 500;
 }
 
-/* Google button rules preserved but responsive */
 .google-btn {
     display: flex !important;
     justify-content: center !important;
@@ -130,6 +125,8 @@ input:focus {
     width: 100% !important;
     height: 50px !important;
     margin-top: 10px !important;
+    min-width: 300px !important;
+    max-width: 400px !important;
     box-sizing: border-box !important;
     overflow: hidden !important;
 }
@@ -143,26 +140,33 @@ input:focus {
 }
 
 .signup-text {
-    margin-top: 12px;
+    margin-top: 15px;
     font-size: 14px;
 }
 
-/* MOBILE */
-@media (max-width: 900px) {
-    .container { gap: 40px; }
-    .splash-area { width: 300px; height: 360px; }
+.signup-text a {
+    color: #0095f6;
+    text-decoration: none;
+    font-weight: 600;
 }
 
-@media (max-width: 520px) {
+.festive-regular {
+  font-family: "Festive", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.permanent-marker-regular {
+  font-family: "Permanent Marker", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@media (max-width: 800px) {
     .container {
         flex-direction: column;
-        gap: 28px;
+        align-items: center;
+        gap: 30px;
     }
-    .splash-area {
-        width: 250px;
-        height: 300px;
-    }
-
-    /* Slightly reduce logo size */
-    .logo { font-size: 40px; }
+    .splash-area { width: 250px; height: 330px; }
 }
