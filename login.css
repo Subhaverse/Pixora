@@ -119,24 +119,16 @@ input:focus {
 }
 
 .google-btn {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    width: 100% !important;
-    height: 50px !important;
-    margin-top: 10px !important;
-    min-width: 300px !important;
-    max-width: 400px !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
 }
 
-.google-btn > div {
-    flex: 1 1 auto !important;
-    height: 100% !important;
+.google-btn iframe,
+.google-btn div {
     width: 100% !important;
-    border-radius: 5px !important;
-    overflow: hidden !important;
+    max-width: 260px !important;  /* Google minimum width */
 }
 
 .signup-text {

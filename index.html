@@ -32,12 +32,35 @@
       <button id="loginBtn" class="btn-login">Sign In</button>
 
       <div class="divider">OR</div>
+
+      <!-- Google Sign-In button container -->
       <div id="googleLogin" class="google-btn"></div>
 
       <p class="signup-text">Don’t have an account? <a href="signup.html">Sign Up</a></p>
     </div>
 
   </div>
+
+  <script>
+    // Render Google button correctly
+    window.onload = function () {
+      google.accounts.id.initialize({
+        client_id: "YOUR_CLIENT_ID_HERE",
+        callback: function(response) {
+          console.log("Google login:", response);
+        }
+      });
+
+      google.accounts.id.renderButton(
+        document.getElementById("googleLogin"),
+        {
+          theme: "outline",
+          size: "large",
+          width: "100%"   // <-- This line ensures full responsiveness
+        }
+      );
+    };
+  </script>
 
   <script src="login.js"></script>
 </body>
