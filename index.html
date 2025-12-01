@@ -14,6 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
 </head>
 <body>
+
   <div class="container">
 
     <!-- Splash images -->
@@ -34,7 +35,7 @@
       <div class="divider">OR</div>
 
       <!-- Google Sign-In button container -->
-      <div id="googleLogin" class="google-btn"></div>
+      <div id="googleLogin"></div>
 
       <p class="signup-text">Don’t have an account? <a href="signup.html">Sign Up</a></p>
     </div>
@@ -42,13 +43,11 @@
   </div>
 
   <script>
-    // Render Google button correctly
+    
     window.onload = function () {
       google.accounts.id.initialize({
         client_id: "YOUR_CLIENT_ID_HERE",
-        callback: function(response) {
-          console.log("Google login:", response);
-        }
+        callback: (res) => console.log(res),
       });
 
       google.accounts.id.renderButton(
@@ -56,7 +55,7 @@
         {
           theme: "outline",
           size: "large",
-          width: "100%"   // <-- This line ensures full responsiveness
+          width: "100%"
         }
       );
     };
