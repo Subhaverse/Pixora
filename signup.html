@@ -6,10 +6,118 @@
   <title>Sign Up — Pixora</title>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="signup.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
 
-  <!-- Material Symbols -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    :root {
+      --bg:#071022;
+      --muted:#b9c3cf;
+      --accent:#4f46e5;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin:0;
+      background:linear-gradient(135deg,var(--bg),#0b1a33);
+      font-family:Inter,sans-serif;
+      color:white;
+    }
+
+    .center {
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
+
+    .card {
+      background:rgba(255,255,255,0.05);
+      padding:24px;
+      border-radius:12px;
+      width:350px;
+      text-align:center;
+      box-shadow:0 8px 25px rgba(0,0,0,0.5);
+    }
+
+    input {
+      width:100%;
+      padding:12px;
+      margin:6px 0;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,0.12);
+      background:transparent;
+      color:white;
+    }
+
+    input:focus {
+      outline:none;
+      border-color:#4fa8ff;
+      box-shadow:0 0 0 2px rgba(79,168,255,0.3);
+    }
+
+    .input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .input-wrapper input {
+      padding-right: 40px;
+    }
+
+    .eye-icon {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      transform: translateY(-50%);
+      font-size: 22px;
+      color: #777;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .eye-icon.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+    }
+
+    .btn.primary {
+      width:100%;
+      padding:12px;
+      margin-top:10px;
+      border:none;
+      border-radius:8px;
+      background:linear-gradient(90deg,#4f46e5,#00c4ff);
+      color:white;
+      font-weight:600;
+      cursor:pointer;
+    }
+
+    .muted { margin-top:8px; color:var(--muted); }
+
+    .redirect-text {
+      margin-top:12px;
+      font-size:14px;
+      opacity:0.9;
+    }
+
+    .redirect-text a {
+      color:#4fa8ff;
+      text-decoration:none;
+      font-weight:600;
+    }
+  </style>
 </head>
 <body>
 
@@ -22,14 +130,17 @@
 
       <!-- Password wrapper -->
       <div class="input-wrapper">
-        <input id="signupPassword" type="password" placeholder="Password">
-        <span class="material-symbols-outlined eye-icon" id="togglePassword">visibility</span>
+        <input id="signupPassword" type="password" placeholder="Password"
+          onfocus="showEye(this)" oninput="showEye(this); hideEyeIfEmpty(this)">
+        <span id="toggleEye" class="material-symbols-outlined eye-icon"
+          onclick="togglePassword('signupPassword', this)">visibility</span>
       </div>
 
       <button id="signupBtn" class="btn primary">Sign Up</button>
-      <div id="signupMsg" class="muted"></div>
 
+      <div id="signupMsg" class="muted"></div>
       <hr>
+
       <div class="redirect-text">
         Already have an account? <a href="index.html">Sign In</a>
       </div>
@@ -64,8 +175,78 @@
     };
   </script>
 
-  <!-- JS -->
-  <script src="signup.js"></script>
+  <!-- Password Toggle Logic -->
+  <script>
+    function togglePassword(id, icon) {
+      const field = document.getElementById(id);
+      if (field.type === "password") {
+        field.type = "text";
+        icon.textContent = "visibility_off";
+      } else {
+        field.type = "password";
+        icon.textContent = "visibility";
+      }
+    }
+
+    function showEye(input) {
+      const eye = document.getElementById("toggleEye");
+      eye.classList.add("visible");
+    }
+
+    function hideEyeIfEmpty(input) {
+      const eye = document.getElementById("toggleEye");
+      if (input.value.length === 0) {
+        eye.classList.remove("visible");
+      }
+    }
+
+    // Signup logic
+    const usernameInput = document.getElementById("signupUsername");
+    const emailInput = document.getElementById("signupEmail");
+    const passwordInput = document.getElementById("signupPassword");
+    const signupBtn = document.getElementById("signupBtn");
+    const signupMsg = document.getElementById("signupMsg");
+
+    signupBtn.onclick = async () => {
+      const name = usernameInput.value.trim();
+      const email = emailInput.value.trim();
+      const pass = passwordInput.value;
+
+      if (!name || !email || !pass) {
+        signupMsg.textContent = "All fields are required.";
+        signupMsg.style.color = "red";
+        return;
+      }
+
+      try {
+        await window.firebaseCreateUser(name, email, pass);
+        signupMsg.textContent = "Account created! Redirecting...";
+        signupMsg.style.color = "green";
+        setTimeout(() => window.location.href = "index.html", 1000);
+      } catch (err) {
+        let message = "Signup failed.";
+        switch (err.code) {
+          case "auth/email-already-in-use":
+            message = "Email already exists.";
+            break;
+          case "auth/invalid-email":
+            message = "Invalid email format.";
+            break;
+          case "auth/weak-password":
+            message = "Password should be at least 6 characters.";
+            break;
+          default:
+            message = err.message || "Signup failed.";
+        }
+        signupMsg.textContent = message;
+        signupMsg.style.color = "red";
+      }
+    };
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") signupBtn.click();
+    });
+  </script>
 
 </body>
 </html>
