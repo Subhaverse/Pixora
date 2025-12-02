@@ -14,38 +14,39 @@
 
   <!-- Material Symbols -->
   <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=visibility,visibility_off">
-
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=visibility,visibility_off">
 </head>
+
 <body>
 
   <div class="container">
 
-    <!-- Splash images -->
+    <!-- Splash Images -->
     <div class="splash-area">
       <img src="img/main.jpg" class="splash-img" alt="Main preview of Pixora app">
       <img src="img/overlay1.jpg" class="overlay1" alt="Overlay preview 1">
       <img src="img/overlay2.jpg" class="overlay2" alt="Overlay preview 2">
     </div>
 
-    <!-- Login box -->
+    <!-- Login Box -->
     <div class="login-box">
+
       <h1 class="logo">Pixora</h1>
 
+      <!-- Email Input -->
       <input type="email" id="emailInput" placeholder="Email">
 
-      <!-- Password field -->
+      <!-- Password Input -->
       <div class="password-wrapper">
         <input 
           type="password" 
           id="passwordInput" 
           placeholder="Password"
-          onfocus="showEye(this)"
-          oninput="showEye(this)"
-          onblur="hideEyeIfEmpty(this)"
+          oninput="handlePasswordInput(this)"
         >
+
         <span 
-          class="material-symbols-outlined show-icon"
+          class="material-symbols-outlined show-icon" 
           id="toggleEye"
           onclick="togglePassword('passwordInput', this)"
         >
@@ -53,27 +54,36 @@
         </span>
       </div>
 
+      <!-- Login Button -->
       <button id="loginBtn" class="btn-login">Sign In</button>
 
       <div class="divider">OR</div>
 
-      <!-- Google Sign-In button -->
+      <!-- Google Sign-in -->
       <div id="googleLogin"></div>
 
+      <!-- Sign Up -->
       <p class="signup-text">
         Don’t have an account? <a href="signup.html">Sign Up</a>
       </p>
 
+      <!-- Error Message -->
       <div id="loginMsg" class="muted" style="margin-top:10px;"></div>
+
     </div>
 
   </div>
 
-  <!-- Firebase init -->
+  <!-- Firebase Init -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } 
-      from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+    import { 
+      getAuth, 
+      signInWithEmailAndPassword, 
+      GoogleAuthProvider, 
+      signInWithPopup, 
+      onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCzas4koTSeD8YE4Z4-2h8qyD32ApNwVP4",
@@ -107,16 +117,18 @@
         style="width:20px;height:20px;margin-right:10px;">
         Sign in with Google
       `;
-      btn.style.background = "#fff";
-      btn.style.color = "#111";
-      btn.style.display = "inline-flex";
-      btn.style.alignItems = "center";
-      btn.style.justifyContent = "center";
-      btn.style.gap = "10px";
-      btn.style.border = "1px solid #dcdcdc";
-      btn.style.width = "100%";
-      btn.style.padding = "12px";
-      btn.style.borderRadius = "5px";
+      btn.style.cssText = `
+        background:#fff; 
+        color:#111; 
+        border:1px solid #dcdcdc;
+        width:100%;
+        padding:12px;
+        border-radius:5px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:10px;
+      `;
       btn.onclick = async () => {
         try { await window.firebaseSignInWithGoogle(); } 
         catch (err) { alert("Google sign-in failed: " + err.message); }
@@ -131,11 +143,12 @@
     });
   </script>
 
-  <!-- Login JS -->
+  <!-- Login Logic -->
   <script src="login.js"></script>
 
-  <!-- Password Toggle Logic -->
+  <!-- Password Eye Logic -->
   <script>
+    // Toggle show/hide password
     function togglePassword(id, icon) {
       const field = document.getElementById(id);
       if (field.type === "password") {
@@ -147,16 +160,13 @@
       }
     }
 
-    function showEye(input) {
+    // Show/Hide Eye Based on Input
+    function handlePasswordInput(input) {
       const eye = document.getElementById("toggleEye");
-      if (input.value.length > 0 || input === document.activeElement) {
-        eye.classList.add("visible");
-      }
-    }
 
-    function hideEyeIfEmpty(input) {
-      const eye = document.getElementById("toggleEye");
-      if (input.value.length === 0 && input !== document.activeElement) {
+      if (input.value.length > 0) {
+        eye.classList.add("visible");
+      } else {
         eye.classList.remove("visible");
       }
     }
