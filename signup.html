@@ -57,23 +57,25 @@
       box-shadow:0 0 0 2px rgba(79,168,255,0.3);
     }
 
+    /* -------- Password Eye Icon Fixed (Exactly like LOGIN page) -------- */
+
     .input-wrapper {
       position: relative;
       width: 100%;
     }
 
     .input-wrapper input {
-      padding-right: 40px;
+      padding-right: 40px; /* space for eye */
     }
 
     .eye-icon {
       position: absolute;
-      top: 50%;
       right: 12px;
+      top: 50%;
       transform: translateY(-50%);
-      font-size: 22px;
-      color: #777;
       cursor: pointer;
+      font-size: 22px;
+      color: #bbb;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.2s ease;
@@ -92,6 +94,7 @@
         'opsz' 24;
     }
 
+    /* Buttons */
     .btn.primary {
       width:100%;
       padding:12px;
@@ -131,7 +134,8 @@
       <!-- Password wrapper -->
       <div class="input-wrapper">
         <input id="signupPassword" type="password" placeholder="Password"
-          onfocus="showEye(this)" oninput="showEye(this); hideEyeIfEmpty(this)">
+          oninput="handlePasswordInput(this)"
+        >
         <span id="toggleEye" class="material-symbols-outlined eye-icon"
           onclick="togglePassword('signupPassword', this)">visibility</span>
       </div>
@@ -188,14 +192,13 @@
       }
     }
 
-    function showEye(input) {
+    // EXACT SAME BEHAVIOR AS LOGIN PAGE
+    function handlePasswordInput(input) {
       const eye = document.getElementById("toggleEye");
-      eye.classList.add("visible");
-    }
 
-    function hideEyeIfEmpty(input) {
-      const eye = document.getElementById("toggleEye");
-      if (input.value.length === 0) {
+      if (input.value.length > 0) {
+        eye.classList.add("visible");
+      } else {
         eye.classList.remove("visible");
       }
     }

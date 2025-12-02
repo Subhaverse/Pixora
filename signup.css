@@ -82,8 +82,7 @@ input:focus {
   transition: opacity 0.2s ease;
 }
 
-/* Show eye icon on focus or when manually toggled */
-.input-wrapper input:focus + .eye-icon,
+/* 👁 Only show when JS adds .visible (like login page) */
 .eye-icon.visible {
   opacity: 1;
   pointer-events: auto;
