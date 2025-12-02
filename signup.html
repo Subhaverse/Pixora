@@ -1,31 +1,42 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign Up — Pixora</title>
+
+  <!-- CSS -->
   <link rel="stylesheet" href="signup.css">
+
+  <!-- Material Symbols -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
 </head>
 <body>
+
   <div class="center">
     <div class="card">
       <h3>Create an Account</h3>
 
       <input id="signupUsername" type="text" placeholder="Username">
       <input id="signupEmail" type="email" placeholder="Email">
-      <input id="signupPassword" type="password" placeholder="Password">
+
+      <!-- Password wrapper -->
+      <div class="input-wrapper">
+        <input id="signupPassword" type="password" placeholder="Password">
+        <span class="material-symbols-outlined eye-icon" id="togglePassword">visibility</span>
+      </div>
 
       <button id="signupBtn" class="btn primary">Sign Up</button>
       <div id="signupMsg" class="muted"></div>
 
       <hr>
-
       <div class="redirect-text">
         Already have an account? <a href="index.html">Sign In</a>
       </div>
     </div>
   </div>
 
+  <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
@@ -44,10 +55,8 @@
     const auth = getAuth(app);
     window.firebaseAuth = auth;
 
-    // Expose create user helper
     window.firebaseCreateUser = async (username, email, password) => {
       const userCred = await createUserWithEmailAndPassword(auth, email, password);
-      // set displayName (username) on the user profile
       if (username) {
         await updateProfile(userCred.user, { displayName: username });
       }
@@ -55,6 +64,8 @@
     };
   </script>
 
+  <!-- JS -->
   <script src="signup.js"></script>
+
 </body>
 </html>

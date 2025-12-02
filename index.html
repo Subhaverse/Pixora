@@ -12,6 +12,51 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Festive&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+
+  <!-- MATERIAL SYMBOLS (visibility + visibility_off) -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:
+    opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=visibility,visibility_off">
+
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+    }
+
+    /* PASSWORD UI FIX */
+    .password-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .show-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #666;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    /* icon is visible */
+    .show-icon.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .password-wrapper input {
+      width: 100%;
+      padding-right: 40px;
+    }
+  </style>
+
 </head>
 <body>
 
@@ -29,21 +74,44 @@
       <h1 class="logo">Pixora</h1>
 
       <input type="email" id="emailInput" placeholder="Email">
-      <input type="password" id="passwordInput" placeholder="Password">
+
+      <!-- PASSWORD FIELD WITH SHOW/HIDE ICON -->
+      <div class="password-wrapper">
+        <input 
+          type="password" 
+          id="passwordInput" 
+          placeholder="Password"
+          onfocus="showEye(this)"
+          oninput="showEye(this)"
+          onblur="hideEyeIfEmpty(this)"
+        >
+
+        <span 
+          class="material-symbols-outlined show-icon"
+          id="toggleEye"
+          onclick="togglePassword('passwordInput', this)"
+        >
+          visibility
+        </span>
+      </div>
+
       <button id="loginBtn" class="btn-login">Sign In</button>
 
       <div class="divider">OR</div>
 
-      <!-- Google Sign-In button container (keeps your layout) -->
+      <!-- Google Sign-In button -->
       <div id="googleLogin"></div>
 
-      <p class="signup-text">Don’t have an account? <a href="signup.html">Sign Up</a></p>
+      <p class="signup-text">
+        Don’t have an account? <a href="signup.html">Sign Up</a>
+      </p>
+
       <div id="loginMsg" class="muted" style="margin-top:10px;"></div>
     </div>
 
   </div>
 
-  <!-- Firebase init & small helpers (module) -->
+  <!-- Firebase init & helpers -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
     import {
@@ -51,12 +119,9 @@
       signInWithEmailAndPassword,
       GoogleAuthProvider,
       signInWithPopup,
-      signOut,
-      onAuthStateChanged,
-      updateProfile
+      onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-    // YOUR firebaseConfig (kept from earlier)
     const firebaseConfig = {
       apiKey: "AIzaSyCzas4koTSeD8YE4Z4-2h8qyD32ApNwVP4",
       authDomain: "pixora-65cc7.firebaseapp.com",
@@ -70,28 +135,27 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Expose auth to non-module scripts
-    window.firebaseAuth = auth;
-
-    // Expose sign-in with email function
     window.firebaseSignInWithEmail = async (email, password) => {
       return await signInWithEmailAndPassword(auth, email, password);
     };
 
-    // Expose sign-in with Google
     const provider = new GoogleAuthProvider();
     window.firebaseSignInWithGoogle = async () => {
       return await signInWithPopup(auth, provider);
     };
 
-    // Render a Google-styled button inside #googleLogin (keeps layout stable)
     const googleContainer = document.getElementById("googleLogin");
     if (googleContainer) {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "btn-login google-native-btn";
-      // style the small Google logo and text similarly to your UI
-      btn.innerHTML = '<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="G" style="width:20px;height:20px;margin-right:10px;vertical-align:middle"/><span style="vertical-align:middle">Sign in with Google</span>';
+
+      btn.innerHTML = `
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
+        style="width:20px;height:20px;margin-right:10px;">
+        Sign in with Google
+      `;
+
       btn.style.background = "#fff";
       btn.style.color = "#111";
       btn.style.display = "inline-flex";
@@ -102,30 +166,54 @@
       btn.style.width = "100%";
       btn.style.padding = "12px";
       btn.style.borderRadius = "5px";
+
       btn.onclick = async () => {
         try {
           await window.firebaseSignInWithGoogle();
-          // redirect will be handled by login.js onAuthState
         } catch (err) {
           alert("Google sign-in failed: " + err.message);
         }
       };
+
       googleContainer.appendChild(btn);
     }
 
-    // Optional: handle immediate auth state changes (redirect if already signed in)
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // if user already authenticated, go to home
-        // do not redirect if already on home
-        if (!location.pathname.includes("home.html")) {
-          location.href = "home.html";
-        }
+      if (user && !location.pathname.includes("home.html")) {
+        location.href = "home.html";
       }
     });
   </script>
 
-  <!-- Your login logic (updated to call Firebase helpers) -->
+  <!-- Login Logic -->
   <script src="login.js"></script>
+
+  <!-- Password Toggle Logic -->
+  <script>
+    function togglePassword(id, icon) {
+      const field = document.getElementById(id);
+
+      if (field.type === "password") {
+        field.type = "text";
+        icon.textContent = "visibility_off";
+      } else {
+        field.type = "password";
+        icon.textContent = "visibility";
+      }
+    }
+
+    function showEye(input) {
+      const eye = document.getElementById("toggleEye");
+      eye.classList.add("visible");
+    }
+
+    function hideEyeIfEmpty(input) {
+      const eye = document.getElementById("toggleEye");
+      if (input.value.length === 0) {
+        eye.classList.remove("visible");
+      }
+    }
+  </script>
+
 </body>
 </html>
