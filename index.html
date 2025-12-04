@@ -4,31 +4,56 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pixora — Login</title>
-  <link rel="stylesheet" href="login.css">
-
+  
   <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Festive&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
 
   <!-- Material Symbols -->
   <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=visibility,visibility_off">
-</head>
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=visibility,visibility_off">
 
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="login.css">
+  
+  <style>
+    /* Sign Up text directly below login box */
+    .login-box {
+      position: relative; /* required for absolute positioning of sign-up text */
+    }
+
+    .signup-text-outside {
+      position: absolute;       /* manual positioning */
+      top: 100%;                /* below login box */
+      left: 50%;                /* center horizontally */
+      transform: translateX(-50%) translateY(10px); /* fine-tune spacing */
+      font-size: 14px;
+      text-align: center;
+      width: auto;
+    }
+    .signup-text-outside a {
+      color: #0095f6;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .signup-text-outside a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <!-- Splash Images -->
-    <div class="splash-area">
-      <img src="img/main.jpg" class="splash-img" alt="Main preview of Pixora app">
-      <img src="img/overlay1.jpg" class="overlay1" alt="Overlay preview 1">
-      <img src="img/overlay2.jpg" class="overlay2" alt="Overlay preview 2">
-    </div>
+  <!-- Splash Images -->
+  <div class="splash-area">
+    <img src="img/main.jpg" class="splash-img" alt="Main preview of Pixora app">
+    <img src="img/overlay1.jpg" class="overlay1" alt="Overlay preview 1">
+    <img src="img/overlay2.jpg" class="overlay2" alt="Overlay preview 2">
+  </div>
 
-    <!-- Login Box -->
+  <!-- Login Section -->
+  <div class="login-section">
     <div class="login-box">
 
       <h1 class="logo">Pixora</h1>
@@ -38,20 +63,9 @@
 
       <!-- Password Input -->
       <div class="password-wrapper">
-        <input 
-          type="password" 
-          id="passwordInput" 
-          placeholder="Password"
-          oninput="handlePasswordInput(this)"
-        >
-
-        <span 
-          class="material-symbols-outlined show-icon" 
-          id="toggleEye"
-          onclick="togglePassword('passwordInput', this)"
-        >
-          visibility
-        </span>
+        <input type="password" id="passwordInput" placeholder="Password" oninput="handlePasswordInput(this)">
+        <span class="material-symbols-outlined show-icon" id="toggleEye"
+              onclick="togglePassword('passwordInput', this)">visibility</span>
       </div>
 
       <!-- Login Button -->
@@ -62,115 +76,87 @@
       <!-- Google Sign-in -->
       <div id="googleLogin"></div>
 
-      <!-- Sign Up -->
-      <p class="signup-text">
-        Don’t have an account? <a href="signup.html">Sign Up</a>
+      <!-- Forgot Password -->
+      <p class="forgot-password">
+        <a href="forgot.html">Forgot Password?</a>
       </p>
 
       <!-- Error Message -->
       <div id="loginMsg" class="muted" style="margin-top:10px;"></div>
 
-    </div>
+      <!-- SIGN UP BELOW BOX -->
+      <p class="signup-text-outside">
+        Don’t have an account? <a href="signup.html">Sign Up</a>
+      </p>
 
-  </div>
+    </div> <!-- END login-box -->
+  </div> <!-- END login-section -->
 
-  <!-- Firebase Init -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-    import { 
-      getAuth, 
-      signInWithEmailAndPassword, 
-      GoogleAuthProvider, 
-      signInWithPopup, 
-      onAuthStateChanged 
-    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+</div> <!-- END container -->
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCzas4koTSeD8YE4Z4-2h8qyD32ApNwVP4",
-      authDomain: "pixora-65cc7.firebaseapp.com",
-      projectId: "pixora-65cc7",
-      storageBucket: "pixora-65cc7.firebasestorage.app",
-      messagingSenderId: "684148587068",
-      appId: "1:684148587068:web:a58d492d85c6dc7a24e139",
-      measurementId: "G-72ZTVEJVR3"
-    };
+<!-- Firebase Init -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+const firebaseConfig = {
+  apiKey: "AIzaSyCzas4koTSeD8YE4Z4-2h8qyD32ApNwVP4",
+  authDomain: "pixora-65cc7.firebaseapp.com",
+  projectId: "pixora-65cc7",
+  storageBucket: "pixora-65cc7.appspot.com",
+  messagingSenderId: "684148587068",
+  appId: "1:684148587068:web:a58d492d85c6dc7a24e139",
+  measurementId: "G-72ZTVEJVR3"
+};
 
-    window.firebaseSignInWithEmail = async (email, password) => {
-      return await signInWithEmailAndPassword(auth, email, password);
-    };
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-    const provider = new GoogleAuthProvider();
-    window.firebaseSignInWithGoogle = async () => {
-      return await signInWithPopup(auth, provider);
-    };
+window.firebaseSignInWithEmail = async (email, password) => await signInWithEmailAndPassword(auth, email, password);
 
-    const googleContainer = document.getElementById("googleLogin");
-    if (googleContainer) {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "btn-login google-native-btn";
-      btn.innerHTML = `
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
-        style="width:20px;height:20px;margin-right:10px;">
-        Sign in with Google
-      `;
-      btn.style.cssText = `
-        background:#fff; 
-        color:#111; 
-        border:1px solid #dcdcdc;
-        width:100%;
-        padding:12px;
-        border-radius:5px;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        gap:10px;
-      `;
-      btn.onclick = async () => {
-        try { await window.firebaseSignInWithGoogle(); } 
-        catch (err) { alert("Google sign-in failed: " + err.message); }
-      };
-      googleContainer.appendChild(btn);
-    }
+const provider = new GoogleAuthProvider();
+window.firebaseSignInWithGoogle = async () => await signInWithPopup(auth, provider);
 
-    onAuthStateChanged(auth, (user) => {
-      if (user && !location.pathname.includes("home.html")) {
-        location.href = "home.html";
-      }
-    });
-  </script>
+const googleContainer = document.getElementById("googleLogin");
+if (googleContainer) {
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "btn-login google-native-btn";
+  btn.innerHTML = `<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
+  style="width:20px;height:20px;margin-right:10px;">Sign in with Google`;
+  btn.style.cssText = `
+    background:#fff; 
+    color:#111; 
+    border:1px solid #dcdcdc;
+    width:100%;
+    padding:12px;
+    border-radius:5px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+  `;
+  btn.onclick = async () => { try { await window.firebaseSignInWithGoogle(); } catch(err){ alert(err.message); }};
+  googleContainer.appendChild(btn);
+}
 
-  <!-- Login Logic -->
-  <script src="login.js"></script>
+onAuthStateChanged(auth, (user) => { if(user && !location.pathname.includes("home.html")) location.href = "home.html"; });
+</script>
 
-  <!-- Password Eye Logic -->
-  <script>
-    // Toggle show/hide password
-    function togglePassword(id, icon) {
-      const field = document.getElementById(id);
-      if (field.type === "password") {
-        field.type = "text";
-        icon.textContent = "visibility_off";
-      } else {
-        field.type = "password";
-        icon.textContent = "visibility";
-      }
-    }
+<script src="login.js"></script>
 
-    // Show/Hide Eye Based on Input
-    function handlePasswordInput(input) {
-      const eye = document.getElementById("toggleEye");
+<script>
+function togglePassword(id, icon) {
+  const field = document.getElementById(id);
+  if (field.type === "password") { field.type = "text"; icon.textContent="visibility_off"; } 
+  else { field.type="password"; icon.textContent="visibility"; }
+}
 
-      if (input.value.length > 0) {
-        eye.classList.add("visible");
-      } else {
-        eye.classList.remove("visible");
-      }
-    }
-  </script>
+function handlePasswordInput(input){
+  const eye = document.getElementById("toggleEye");
+  if(input.value.length>0) eye.classList.add("visible"); else eye.classList.remove("visible");
+}
+</script>
 
 </body>
 </html>

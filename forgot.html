@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixora • Forgot Password</title>
+  
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
+
+  <style>
+    /* ===== GLOBAL ===== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Inter, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #071022, #0b1a33);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #fff;
+      padding: 20px;
+    }
+
+    /* ===== CARD CONTAINER ===== */
+    .container {
+      width: 350px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 35px 30px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+
+    /* ===== PIXORA LOGO ===== */
+    h2.logo {
+      font-family: "Permanent Marker", cursive;
+      font-size: 45px; /* increased size */
+      color: #fff;
+      margin-bottom: 15px;
+      white-space: nowrap; /* keep it in one line */
+    }
+
+    p.subtext {
+      font-size: 14px;
+      color: #b9c3cf;
+      margin-bottom: 25px;
+      line-height: 1.4;
+    }
+
+    /* ===== INPUTS ===== */
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: transparent;
+      color: #fff;
+      font-size: 15px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #4fa8ff;
+      box-shadow: 0 0 0 2px rgba(79,168,255,0.3);
+    }
+
+    /* ===== BUTTON ===== */
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(90deg, #4f46e5, #00c4ff);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    /* ===== MESSAGE ===== */
+    #resetMsg {
+      margin-top: 10px;
+      font-size: 14px;
+      min-height: 20px;
+    }
+
+    /* ===== LINKS ===== */
+    a {
+      color: #4fa8ff;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-block;
+      margin-top: 15px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* ===== MOBILE ===== */
+    @media (max-width: 500px) {
+      .container { width: 90%; padding: 25px; }
+      h2.logo { font-size: 40px; } /* scale down for small screens */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2 class="logo">Pixora</h2>
+    <p class="subtext">Enter your email below and we’ll send a link to reset your password.</p>
+
+    <input type="email" id="resetEmail" placeholder="Enter your email">
+
+    <button id="resetBtn">Send Reset Link</button>
+
+    <div id="resetMsg"></div>
+
+    <a href="index.html">Back to Login</a>
+  </div>
+
+  <!-- ===== FIREBASE CONFIG ===== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCzas4koTSeD8YE4Z4-2h8qyD32ApNwVP4",
+      authDomain: "pixora-65cc7.firebaseapp.com",
+      projectId: "pixora-65cc7",
+      storageBucket: "pixora-65cc7.appspot.com",
+      messagingSenderId: "684148587068",
+      appId: "1:684148587068:web:a58d492d85c6dc7a24e139",
+      measurementId: "G-72ZTVEJVR3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.firebaseSendResetEmail = async (email) => await sendPasswordResetEmail(auth, email);
+  </script>
+
+  <!-- ===== FORGOT PASSWORD JS ===== -->
+  <script>
+    const emailInput = document.getElementById("resetEmail");
+    const resetBtn = document.getElementById("resetBtn");
+    const resetMsg = document.getElementById("resetMsg");
+
+    let isSending = false;
+
+    resetBtn.onclick = async () => {
+      if (isSending) return;
+
+      const email = emailInput.value.trim();
+      resetMsg.textContent = "";
+
+      if (!email) {
+        showMessage("Please enter your email.", "red");
+        return;
+      }
+
+      if (!window.firebaseSendResetEmail) {
+        showMessage("System error. Refresh page.", "red");
+        return;
+      }
+
+      try {
+        isSending = true;
+        resetBtn.disabled = true;
+        resetBtn.textContent = "Sending...";
+
+        await window.firebaseSendResetEmail(email);
+        showMessage("Reset link sent! Check your inbox.", "lightgreen");
+      } catch (err) {
+        let msg = "Error sending reset email.";
+
+        switch (err.code) {
+          case "auth/user-not-found":
+            msg = "No account exists with this email.";
+            break;
+          case "auth/invalid-email":
+            msg = "Invalid email format.";
+            break;
+          case "auth/too-many-requests":
+            msg = "Too many attempts. Try again later.";
+            break;
+        }
+
+        showMessage(msg, "red");
+      } finally {
+        isSending = false;
+        resetBtn.disabled = false;
+        resetBtn.textContent = "Send Reset Link";
+      }
+    };
+
+    function showMessage(text, color) {
+      resetMsg.textContent = text;
+      resetMsg.style.color = color;
+    }
+
+    // Submit on Enter
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Enter" && !isSending) resetBtn.click();
+    });
+  </script>
+
+</body>
+</html>

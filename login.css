@@ -1,8 +1,13 @@
+/* ===== FONTS ===== */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;600&family=Festive&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
 
-* { box-sizing: border-box; margin:0; padding:0; }
-
+/* ===== GLOBAL ===== */
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
 body {
     font-family: Inter, sans-serif;
     background: #0b1a33;
@@ -11,18 +16,22 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    padding: 20px;
 }
 
 .container {
     display: flex;
     gap: 80px;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: center; /* centers both splash and login-section horizontally */
     align-items: flex-start;
 }
 
-/* SPLASH IMAGES */
-.splash-area { position: relative; width: 350px; }
+/* ===== SPLASH IMAGES ===== */
+.splash-area { 
+    position: relative; 
+    width: 350px; 
+}
 .splash-img, .overlay1, .overlay2 { 
     position: absolute; 
     border-radius: 15px; 
@@ -35,18 +44,26 @@ body {
 .overlay2 { width: 280px; height: 420px; top:-10px; left:-357px; z-index:1; transform: rotate(-4deg); }
 .splash-img:hover, .overlay1:hover, .overlay2:hover { transform: scale(1.05); }
 
-/* LOGIN BOX */
+/* ===== LOGIN SECTION ===== */
+.login-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* center login box and Sign Up text */
+}
+
+/* ===== LOGIN BOX ===== */
 .login-box { 
-    position: relative; 
-    left: 245px; 
-    top: 20px; 
     background: #fff; 
     padding: 35px 30px; 
     border-radius: 10px; 
     box-shadow: 0 5px 25px rgba(0,0,0,0.1); 
     width: 350px; 
     text-align: center; 
+    position: relative; 
+    left: 245px; /* original shifted position */
+    top: 20px;   /* original shifted position */
 }
+
 .logo { 
     font-family: "Permanent Marker", cursive; 
     font-size: 48px; 
@@ -54,7 +71,7 @@ body {
     margin-bottom: 15px; 
 }
 
-/* INPUTS */
+/* ===== INPUTS ===== */
 .input-wrapper, .password-wrapper { position: relative; width: 100%; }
 input { 
     width: 100%; 
@@ -67,19 +84,11 @@ input {
 }
 input:focus { outline: none; border-color: #0095f6; }
 
-/* 🔥 FIXED PASSWORD EYE ICON BEHAVIOR */
-.password-wrapper input {
-    padding-right: 40px;
-}
-
+/* ===== PASSWORD EYE ICON ===== */
+.password-wrapper input { padding-right: 40px; }
 .material-symbols-outlined { 
-    font-variation-settings: 
-        'FILL' 0,
-        'wght' 400,
-        'GRAD' 0,
-        'opsz' 24;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
-
 .show-icon { 
     position: absolute; 
     right: 12px; 
@@ -92,48 +101,93 @@ input:focus { outline: none; border-color: #0095f6; }
     pointer-events: none; 
     transition: opacity 0.2s ease; 
 }
-
-/* 👁 Eye becomes visible only when JS adds "visible" */
 .show-icon.visible { 
     opacity: 1; 
     pointer-events: auto; 
 }
 
-/* SIGN IN BUTTON */
+/* ===== SIGN IN BUTTON ===== */
 .btn-login { 
     width: 100%; 
     padding: 12px; 
-    margin-top: 10px; 
+    margin-bottom: 10px; 
     background: #0095f6; 
     color: #fff; 
     font-weight: 600; 
     border: none; 
     border-radius: 5px; 
     cursor: pointer; 
+    transition: background 0.3s ease;
 }
+.btn-login:hover { background: #007acc; }
 
-/* Divider */
+/* ===== DIVIDER ===== */
 .divider { 
-    margin: 18px 0; 
+    margin: 10px 0; 
     color: #8e8e8e; 
     font-weight: 600; 
 }
 
-/* GOOGLE SIGN-IN CONTAINER FIXED */
+/* ===== GOOGLE SIGN-IN ===== */
 #googleLogin { 
     width: 100%; 
     display: flex; 
     justify-content: center; 
-    margin-bottom: 20px; 
+    margin-bottom: 15px; 
+}
+.google-native-btn {
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 16px;
 }
 
-/* SIGN UP TEXT */
-.signup-text { margin-top: 10px; font-size: 14px; }
-.signup-text a { color: #0095f6; font-weight: 600; }
+/* ===== FORGOT PASSWORD ===== */
+.forgot-password {
+    margin: 12px 0;
+    font-size: 14px;
+    text-align: center;
+}
+.forgot-password a {
+    color: #1a1a1a;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+.forgot-password a:hover {
+    text-decoration: underline;
+    color: #111;
+}
 
-/* MOBILE FIXES */
+/* ===== SIGN UP TEXT ===== */
+.signup-text-outside {
+  position: absolute;       /* manually positioned below login box */
+  top: 100%;                /* directly below box */
+  left: 50%;                /* center horizontally */
+  transform: translateX(-50%) translateY(10px); /* spacing below box */
+  font-size: 14px;           /* keep original size */
+  font-weight: 600;          /* slightly bold for prominence */
+  color: #ffffff;            /* bright color for visibility */
+  white-space: nowrap;       /* keep in one line */
+  text-align: center;
+}
+
+.signup-text-outside a {
+  color: #007acc;           /* standout link color */
+  font-weight: 700;          /* bold link */
+  text-decoration: none;
+}
+
+.signup-text-outside a:hover {
+  text-decoration: underline;
+}
+
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 800px) {
     .container { flex-direction: column; gap: 30px; }
     .splash-area { width: 250px; height: 330px; }
-    .login-box { left: 0; top: 0; }
+    .login-box { left: 0; top: 0; } /* reset position on smaller screens */
+}
+@media (max-width: 500px) {
+    .logo { font-size: 36px; }
 }
