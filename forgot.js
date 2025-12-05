@@ -1,69 +1,58 @@
-// DOM ELEMENTS
+const btn = document.getElementById("resetBtn");
+const msg = document.getElementById("resetMsg");
 const emailInput = document.getElementById("resetEmail");
-const resetBtn = document.getElementById("resetBtn");
-const resetMsg = document.getElementById("resetMsg");
 
-let isSending = false; // prevent double clicks
+let cooldown = false;
 
-// ---------- RESET BUTTON CLICK ----------
-resetBtn.onclick = async () => {
-  if (isSending) return;
-
+btn.addEventListener("click", async () => {
   const email = emailInput.value.trim();
-  resetMsg.textContent = "";
+  msg.style.color = "red";
 
   if (!email) {
-    showMessage("Please enter your email.", "red");
+    msg.textContent = "Please enter an email.";
     return;
   }
 
-  if (!window.firebaseSendResetEmail) {
-    showMessage("Reset system not ready. Refresh page.", "red");
-    return;
-  }
+  if (cooldown) return;
 
   try {
-    isSending = true;
-    resetBtn.disabled = true;
-    resetBtn.textContent = "Sending...";
+    await resetPassword(email);
 
-    await window.firebaseSendResetEmail(email);
+    msg.style.color = "lightgreen";
+    msg.textContent = "Reset link sent!";
 
-    showMessage("Password reset link sent! Check your inbox.", "lightgreen");
-  } 
-  catch (err) {
-    let msg = "Failed to send reset email.";
+    startCooldown();
 
-    switch (err.code) {
-      case "auth/user-not-found":
-        msg = "No account is registered with this email.";
-        break;
-      case "auth/invalid-email":
-        msg = "Invalid email format.";
-        break;
-      case "auth/too-many-requests":
-        msg = "Too many attempts. Try again later.";
-        break;
-      default:
-        msg = err.message || msg;
-    }
-
-    showMessage(msg, "red");
+  } catch (err) {
+    msg.style.color = "red";
+    msg.textContent = err.message || "Something went wrong";
   }
-  finally {
-    isSending = false;
-    resetBtn.disabled = false;
-    resetBtn.textContent = "Send Reset Link";
-  }
-};
-
-// Press Enter to submit
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Enter" && !isSending) resetBtn.click();
 });
 
-// ---------- Helper function ----------
-function showMessage(text, color) {
-  resetMsg.textContent = text;
-  resetMsg.style.color = color;
+function startCooldown() {
+  cooldown = true;
+  let timeLeft = 30;
+
+  btn.disabled = true;
+  btn.style.opacity = "0.6";
+  btn.textContent = "Wait";    // 🔥 Only “WAIT” here
+
+  msg.style.color = "#c7d2e0";
+  msg.textContent = `You can send again in ${timeLeft}s`;
+
+  const timer = setInterval(() => {
+    timeLeft--;
+    msg.textContent = `You can send again in ${timeLeft}s`; // 🔥 Countdown only here
+
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      cooldown = false;
+
+      btn.disabled = false;
+      btn.style.opacity = "1";
+      btn.textContent = "Send Reset Link"; // restore after cooldown
+
+      msg.textContent = "";
+    }
+  }, 1000);
 }

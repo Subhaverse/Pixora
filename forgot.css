@@ -1,137 +1,115 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;600&family=Festive&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
-@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap'); /* Pixora font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
 
-/* GLOBAL SETTINGS */
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
   font-family: Inter, sans-serif;
 }
 
 body {
-  margin: 0;
-  background: #0b1a33; /* same as login page */
-  color: #262626;
+  background: #0b1a33;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  padding: 20px;
 }
 
-/* CARD / FORM CONTAINER */
-.center {
+/* ==== Box ==== */
+.box {
   width: 350px;
-  background: #fff;
-  border-radius: 10px;
-  padding: 35px 30px;
-  box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 35px 35px 20px 35px; /* ⬅ Reduced bottom padding */
+  border-radius: 12px;
   text-align: center;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.4);
 }
 
-/* PIXORA LOGO / HEADINGS */
-.logo, h1, h2 {
-  font-family: 'Permanent Marker', cursive !important; /* ensures the font applies */
-  font-size: 56px !important; /* bigger size */
-  color: #0b1a33;
-  margin-bottom: 15px;
-  text-align: center;
+/* ==== Button ==== */
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #4f46e5, #00c4ff);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 2px; /* ⬅ Smaller gap under button */
 }
 
-
-/* ICON CIRCLE */
-.icon-circle {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.05);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 15px;
-}
-
-.lock-icon {
-  font-size: 40px;
-  color: #0b1a33;
-}
-
-/* SUBTEXT */
-.subtext {
+/* ==== Messages ==== */
+#resetMsg {
+  margin-top: 3px;  /* ⬅ Less message spacing */
   font-size: 14px;
-  color: #262626;
-  margin-bottom: 20px;
-  line-height: 1.4;
+  min-height: 16px;
 }
 
-/* INPUT FIELDS */
+/* ==== Pixora Logo ==== */
+.logo {
+  font-family: "Permanent Marker", cursive;
+  font-size: 46px;
+  color: white;
+  margin-bottom: 25px;  /* ⭐ Gap increased here */
+}
+
+/* ==== Subtitle ==== */
+.subtitle {
+  color: #c7d2e0;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+/* ==== Input ==== */
 input {
   width: 100%;
   padding: 12px;
-  border-radius: 5px;
-  border: 1px solid #dbdbdb;
-  background: #fafafa;
-  color: #0b1a33;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: transparent;
+  color: white;
   font-size: 15px;
   margin-bottom: 12px;
 }
 
 input:focus {
   outline: none;
-  border-color: #0095f6;
-  box-shadow: 0 0 5px rgba(0,149,246,0.5);
+  border-color: #4fa8ff;
 }
 
-/* BUTTONS */
-.btn, button {
+/* ==== Button ==== */
+button {
   width: 100%;
   padding: 12px;
-  border-radius: 5px;
   border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #4f46e5, #00c4ff);
+  color: white;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: 600;
-  margin-top: 10px;
-  background: #0095f6;
-  color: #fff;
-  transition: background 0.3s ease;
 }
 
-.btn:hover, button:hover {
-  background: #007acc;
+button:hover {
+  opacity: 0.9;
 }
 
-/* SECONDARY BUTTON / LINKS */
-.secondary {
-  background: rgba(255,255,255,0.1);
-  color: #262626;
-  margin-top: 20px;
-}
-
-.link, a {
-  display: block;
-  color: #0095f6;
-  font-weight: 600;
-  margin-top: 10px;
-  text-decoration: none;
-}
-
-.link:hover, a:hover {
-  text-decoration: underline;
-}
-
-/* MESSAGE / STATUS */
-.msg, #resetMsg {
+/* ==== Messages ==== */
+#resetMsg {
   margin-top: 10px;
   font-size: 14px;
-  color: red; /* default color for errors */
+  min-height: 20px;
 }
 
-/* DIVIDER */
-.divider {
-  margin: 20px 0;
-  opacity: 0.3;
-  text-align: center;
-  position: relative;
+/* ==== Back to login ==== */
+.back-link {
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 15px;
+}
+
+.back-link:hover {
+  text-decoration: underline;
 }
