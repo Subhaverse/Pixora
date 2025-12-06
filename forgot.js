@@ -1,58 +1,71 @@
-const btn = document.getElementById("resetBtn");
-const msg = document.getElementById("resetMsg");
-const emailInput = document.getElementById("resetEmail");
+resetBtn.onclick = async () => {
+  if (isSending) return;
 
-let cooldown = false;
-
-btn.addEventListener("click", async () => {
   const email = emailInput.value.trim();
-  msg.style.color = "red";
+  resetMsg.textContent = "";
 
   if (!email) {
-    msg.textContent = "Please enter an email.";
+    showMessage("Please enter your email.", "red");
     return;
   }
 
-  if (cooldown) return;
-
   try {
-    await resetPassword(email);
+    isSending = true;
+    resetBtn.disabled = true;
+    resetBtn.textContent = "Sending...";
 
-    msg.style.color = "lightgreen";
-    msg.textContent = "Reset link sent!";
+    await window.resetPassword(email);
 
+    // SUCCESS
+    showMessage("Reset link sent! Check your inbox.", "lightgreen");
+
+    // Start cooldown only on success
     startCooldown();
+    return;
 
   } catch (err) {
-    msg.style.color = "red";
-    msg.textContent = err.message || "Something went wrong";
+    let msg = "Failed to send reset email.";
+
+    switch (err.code) {
+      case "auth/user-not-found":
+        msg = "No account exists with this email.";
+        break;
+      case "auth/invalid-email":
+        msg = "Invalid email format.";
+        break;
+      case "auth/too-many-requests":
+        msg = "Too many attempts. Try again later.";
+        break;
+    }
+
+    showMessage(msg, "red");
+
+    // Reset button immediately on error
+    resetBtn.disabled = false;
+    resetBtn.textContent = "Send Reset Link";
+    isSending = false;
   }
-});
+};
 
+// Cooldown function
 function startCooldown() {
-  cooldown = true;
-  let timeLeft = 30;
+  let time = 30;
+  resetBtn.disabled = true;
 
-  btn.disabled = true;
-  btn.style.opacity = "0.6";
-  btn.textContent = "Wait";    // 🔥 Only “WAIT” here
+  const interval = setInterval(() => {
+    resetBtn.textContent = `Wait (${time}s)`;
+    time--;
 
-  msg.style.color = "#c7d2e0";
-  msg.textContent = `You can send again in ${timeLeft}s`;
-
-  const timer = setInterval(() => {
-    timeLeft--;
-    msg.textContent = `You can send again in ${timeLeft}s`; // 🔥 Countdown only here
-
-    if (timeLeft <= 0) {
-      clearInterval(timer);
-      cooldown = false;
-
-      btn.disabled = false;
-      btn.style.opacity = "1";
-      btn.textContent = "Send Reset Link"; // restore after cooldown
-
-      msg.textContent = "";
+    if (time < 0) {
+      clearInterval(interval);
+      resetBtn.disabled = false;
+      resetBtn.textContent = "Send Reset Link";
+      isSending = false;
     }
   }, 1000);
+}
+
+function showMessage(text, color) {
+  resetMsg.textContent = text;
+  resetMsg.style.color = color;
 }
