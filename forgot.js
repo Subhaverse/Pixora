@@ -1,3 +1,10 @@
+// DOM ELEMENTS
+const emailInput = document.getElementById("resetEmail");
+const resetBtn = document.getElementById("resetBtn");
+const resetMsg = document.getElementById("resetMsg");
+
+let isSending = false; // prevent double clicks
+
 resetBtn.onclick = async () => {
   if (isSending) return;
 
@@ -9,17 +16,24 @@ resetBtn.onclick = async () => {
     return;
   }
 
+  // Firebase not ready yet?
+  if (!window.resetPassword) {
+    showMessage("System is still loading... try again.", "red");
+    return;
+  }
+
   try {
     isSending = true;
     resetBtn.disabled = true;
     resetBtn.textContent = "Sending...";
 
+    // 🔥 Firebase reset
     await window.resetPassword(email);
 
     // SUCCESS
     showMessage("Reset link sent! Check your inbox.", "lightgreen");
 
-    // Start cooldown only on success
+    // Cooldown ONLY on success
     startCooldown();
     return;
 
@@ -40,14 +54,14 @@ resetBtn.onclick = async () => {
 
     showMessage(msg, "red");
 
-    // Reset button immediately on error
+    // Re-enable button immediately on error
     resetBtn.disabled = false;
     resetBtn.textContent = "Send Reset Link";
     isSending = false;
   }
 };
 
-// Cooldown function
+// Cooldown function (30 seconds)
 function startCooldown() {
   let time = 30;
   resetBtn.disabled = true;
@@ -65,6 +79,7 @@ function startCooldown() {
   }, 1000);
 }
 
+// Display messages
 function showMessage(text, color) {
   resetMsg.textContent = text;
   resetMsg.style.color = color;

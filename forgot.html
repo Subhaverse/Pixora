@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta viewport="width=device-width, initial-scale=1.0">
   <title>Pixora • Forgot Password</title>
   <link rel="stylesheet" href="forgot.css">
 
@@ -27,7 +27,7 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Expose to forgot.js
+    // Expose reset function to forgot.js
     window.resetPassword = async (email) => {
       return await sendPasswordResetEmail(auth, email);
     };
@@ -52,7 +52,6 @@
 
   <a href="index.html" class="back-link">Back to Login</a>
 
-  <!-- JS with cooldown fix -->
   <script src="forgot.js"></script>
 
 </body>
